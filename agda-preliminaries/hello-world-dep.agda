@@ -1,5 +1,3 @@
-{-# OPTIONS --guardedness #-} -- It is not necessary to use this pragma
-
 module agda-preliminaries.hello-world-dep where
 
 open import Data.Nat using (ℕ; zero; suc)
