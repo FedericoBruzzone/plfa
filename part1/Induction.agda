@@ -174,10 +174,10 @@ _ =
   ∎
 *-assoc (suc m) n p =
   begin
-    ((suc m) * n) * p ≡⟨⟩
-    (suc m) * n * p ≡⟨⟩
-    (n + m * n) * p ≡⟨ *-distrib-+ n (m * n) p ⟩
-    (n * p) + m * n * p ≡⟨ cong ((n * p) +_) (*-assoc m n p) ⟩
+    ((suc m) * n) * p     ≡⟨⟩
+    (suc m) * n * p       ≡⟨⟩
+    (n + m * n) * p       ≡⟨ *-distrib-+ n (m * n) p ⟩
+    (n * p) + m * n * p   ≡⟨ cong ((n * p) +_) (*-assoc m n p) ⟩
     (n * p) + m * (n * p) ≡⟨⟩
     suc m  * (n * p)
   ∎
