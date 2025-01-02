@@ -115,19 +115,19 @@ _ =
   ∎
 
 -- Commutativity with rewrite
-+-identity′ : ∀ (n : ℕ) → n + zero ≡ n
++-identity′ : ∀ (n : ℕ) →  n + zero ≡ n
 +-identity′ zero = refl
 +-identity′ (suc n) rewrite +-identity′ n = refl
 
-+-suc′ : ∀ (m n : ℕ) → m + suc n ≡ suc (m + n)
++-suc′ : ∀ (m n : ℕ) →  m + suc n ≡ suc (m + n)
 +-suc′ zero n = refl
 +-suc′ (suc m) n rewrite +-suc′ m n = refl
 
-+-comm′ : ∀ (m n : ℕ) → m + n ≡ n + m
++-comm′ : ∀ (m n : ℕ) →  m + n ≡ n + m
 +-comm′ m zero rewrite +-identity′ m = refl
 +-comm′ m (suc n) rewrite +-suc′ m n | +-comm′ m n = refl
 
-+-assoc′ : ∀ (m n p : ℕ) → (m + n) + p ≡ m + (n + p)
++-assoc′ : ∀ (m n p : ℕ) →  (m + n) + p ≡ m + (n + p)
 +-assoc′ zero n p = refl
 +-assoc′ (suc m) n p rewrite +-assoc′ m n p = refl
 
@@ -181,3 +181,38 @@ _ =
     (n * p) + m * (n * p) ≡⟨⟩
     suc m  * (n * p)
   ∎
+
+-- Exercise *-comm (practice)
+-- Show multiplication is commutative, that is,
+-- m * n ≡ n * m
+-- for all naturals m and n. As with commutativity of addition, you will need to formulate and prove suitable lemmas.
+*-mul-zero : ∀ (n : ℕ) →  n * zero ≡ zero
+*-mul-zero zero = refl
+*-mul-zero (suc n) =
+  begin
+    suc n * zero ≡⟨ *-mul-zero n ⟩
+    zero
+  ∎
+
+*-comm : ∀ (m n : ℕ) →  m * n ≡ n * m
+*-comm zero zero = refl
+*-comm (suc m) zero rewrite *-mul-zero m = refl
+*-comm zero (suc n) rewrite *-mul-zero n = refl
+*-comm (suc m) (suc n) =
+  begin
+   begin
+      begin
+    (suc m) * (suc n) ≡⟨⟩
+    (suc n) + (m * (suc n)) ≡⟨ cong ((suc n) +_) (*-comm m (suc n)) ⟩
+    (suc n) + ((suc n) * m) ≡⟨⟩
+    (suc n) + (m + (n * m)) ≡⟨ +-swap (suc n) m (n * m) ⟩
+    m + ((suc n) + (n * m)) ≡⟨ sym (+-assoc m (suc n) (n * m)) ⟩
+    (m + (suc n)) + (n * m) ≡⟨ cong (_+ (n * m)) (+-suc m n) ⟩
+    suc (m + n) + (n * m)   ≡⟨ cong suc (+-assoc m n (n * m)) ⟩
+    (suc m) + (n + (n * m)) ≡⟨ cong (λ m*n → (suc m) + (n + m*n)) (*-comm n m) ⟩
+    (suc m) + (n + (m * n)) ≡⟨⟩
+    (suc m) + ((suc m) * n) ≡⟨ cong ((suc m) +_) (*-comm ((suc m)) n) ⟩
+    (suc m) + (n * (suc m)) ≡⟨⟩
+    (suc n) * (suc m)
+  ∎
+
